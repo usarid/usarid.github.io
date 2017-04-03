@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<meta name="twitter:card" 		content="summary_large_image">
+	<meta name="twitter:site" 		content="@tastenkunst">
+	<meta name="twitter:creator" 	content="@MarcelKlammer">
+	<meta name="twitter:title" 		content="BRFv4 Technical Preview">
+	<meta name="twitter:description" content="BRFv4 got its first technical preview in Javascript for Chrome and Firefox. A Webcam is needed to try this demo. Yes, it's bright, and we love it.">
+	<meta name="twitter:image"		content="https://tastenkunst.s3.amazonaws.com/demos/brfv4/tp/assets/screen.jpg">
+
+	<meta property="og:url"			content="https://tastenkunst.s3.amazonaws.com/demos/brfv4/tp/index.html" />
+	<meta property="og:type"		content="website" />
+	<meta property="og:title"		content="BRFv4 Technical Preview" />
+	<meta property="og:description"	content="BRFv4 got its first technical preview in Javascript for Chrome and Firefox. A Webcam is needed to try this demo. Yes, it's bright, and we love it." />
+	<meta property="og:image"		content="https://tastenkunst.s3.amazonaws.com/demos/brfv4/tp/assets/screen.jpg">
+
+	<link rel="stylesheet" type="text/css" href="css/brfv4_examples_theme.css">
+	<title>BRFv4 - example chooser</title>
+
+	<script>
+
+		// namespace for the library (mandatory)
+		var brfv4 = {
+			// necessary for emscripten to load the mem file
+			locateFile: function(fileName) { return "js/lib/brf/" + fileName; },
+			// necessary only for the example preloader to have progress listener
+			memoryInitializerRequest: {
+				response: null, status: 200, callback: null,
+				addEventListener: function(type, callback) {
+					brfv4.memoryInitializerRequest.callback = callback;
+				}
+			}
+		};
+
+		// namespace for example related stuff, eg. the preloader
+		brfv4.example = {};
+		brfv4.example.appId = "com.tastenkunst.brfv4.js.examples";
+
+		function start() {
+			brfv4.example.preload([
+				{
+					id: "memFile", "type":createjs.AbstractLoader.BINARY,
+					"src": "js/lib/brf/BRFv4_JS_TK310317_4.0b13_trial.js.mem"
+				},
+				"js/lib/brf/BRFv4_JS_TK310317_4.0b13_trial.js",
+				"https://webrtc.github.io/adapter/adapter-latest.js",
+				"js/lib/quicksettings/quicksettings_tiny.min.css",
+				"js/lib/quicksettings/quicksettings.js",
+
+				"css/highlight_tomorrow.css",
+				"js/lib/highlight/highlight.pack.js",
+
+				"js/lib/createjs/easeljs-0.8.2.min.js",
+				"js/utils/BRFv4DrawingUtils_CreateJS.js",
+
+				"js/lib/threejs/three.js",
+				"js/utils/BRFv4ThreeJSUtils.js",
+				"js/utils/BRFv4WebcamUtils.js",
+				"js/utils/BRFv4SDKUtils.js",
+				"js/utils/BRFv4PointUtils.js",
+				"js/utils/BRFv4Stats.js",
+
+				"js/examples/Setup_Example_Basics.js",
+				"js/examples/Setup_Example_Image.js",
+				"js/examples/Setup_Example_Webcam.js",
+
+				"js/utils/BRFv4SetupChooser.js",
+				"js/utils/BRFv4ExampleChooser.js"
+
+			], function() {
+
+				// Start either using a webcam ...
+				brfv4.example.setupWebcamExample();
+
+				// ... or start using images.
+//				brfv4.example.setupImageExample();
+			});
+		}
+	</script>
+
+	<script src="js/lib/createjs/preloadjs-0.6.2.min.js"></script>
+	<script src="js/utils/BRFv4Preloader.js"></script>
+	<script src="js/utils/BRFv4DemoAnalytics.js"></script>
+
+</head>
+
+<body onload="start();">
+
+<div id="_wrapper">
+	<div id="_content">
+		<video  id="_webcam"></video>
+		<canvas id="_imageData"></canvas>
+		<canvas id="_faceSub"></canvas>
+		<canvas id="_threejs"></canvas>
+		<canvas id="_drawing"></canvas>
+		<div id="_stats"></div>
+		<a href="http://www.tastenkunst.com" target="_blank">
+			<img id="_brfv4_logo" src="assets/brfv4_logo.png" alt="BRFv4 Logo"/>
+		</a>
+	</div>
+
+	<div id="_subline"></div>
+	<div id="_highlight"><pre><code class="javascript" id="_gist"></code></pre></div>
+	<div id="_preloader"></div>
+</div>
+
+<div id="_settingsLeft"></div>
+
+</body>
+</html>
